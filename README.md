@@ -31,6 +31,14 @@ Cambiar usuario editor:
 ```
 chown www-data:www-data <FILE>
 ```
+Instalación de mLocate para encontrar archivos rápido:
+```
+sudo apt install mlocate
+```
+Buscamos archivo con mLocate:
+```
+locate <FILE>
+```
 ## :star: Preparamos servicios HTTP:
 Instalamos APACHE o NGINX:
 ```
@@ -120,6 +128,106 @@ sudo apt install php8.1 libapache2-mod-php8.1
 sudo apt install php8.1-mbstring
 sudo apt install php8.1-mysql
 ```
+
+## :star: Instalación de MYSQL:
+Instalamos MySql:
+```
+sudo apt install mysql-server
+```
+Comprobamos estado del servicio:
+```
+systemctl status mysql.service
+```
+Iniciamos el servicio:
+```
+systemctl start mysql.service
+```
+Detenemos el servicio:
+```
+systemctl stop mysql.service
+```
+Configuramos MYSQL:
+```
+sudo mysql_secure_installation
+```
+> Nos pedirá ingresar una contraseña para MySql.
+
+Ingresamos al shell de MySql en modo ROOT:
+```
+sudo mysql
+```
+Comprobamos estado del los usuarios MySql:
+```
+SELECT user,authentication_string,plugin,host FROM mysql.user;
+```
+Cambiamos el complemento de auth_socket por NATIVE PASSWORD:
+```
+ALTER USER '<USER>'@'<HOST>' IDENTIFIED WITH mysql_native_password BY <PASSWORD>;
+```
+Le decimos a MySql que aplique los cambios:
+```
+FLUSH PRIVILEGES;
+```
+> Listamos la tabla nuevamente para comprobar el cambio.
+
+Creación de usuario MySql para conexiones a base de datos:
+> Ingresamos en modo Root
+```
+mysql -u root -p
+```
+Creamos el usuario con:
+```
+CREATE USER '<NEWUSER>'@'<HOST>' IDENTIFIED BY '<PASSWORD>';
+```
+Otorgamos todos lo privilegios de ser el caso:
+```
+GRANT ALL PRIVILEGES ON * . * TO '<NEWUSER>'@'<HOST>';
+```
+Salimos del shell de MySql con:
+```
+quit
+```
+## :star: Instalación de PhpMyAdmin:
+Instalamos con:
+```
+sudo apt install phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+```
+> Seleccionamos opcion "Apache2" y luego "Yes"
+> Si salta un error le damos en "abort"
+
+Para solucionar el error de instalación de PhpMyAdmin debemos entrar al shell de MySql y eliminar el componente de autenticación por un momento:
+>Ingresamos al shell de MySql como ROOT:
+```
+mysql -u root -p
+```
+> Desinstalamos el componente de autenticación:
+```
+UNINSTALL COMPONENT "file://component_validate_password";
+```
+> Salimos del shell de MySql.
+> Volvemos a instalar PhpMyAdmin.
+
+> Despues de haber instalamos debemos volver a instalar el componente de autenticación con:
+```
+INSTALL COMPONENT "file://component_validate_password";
+```
+Nos dirigimos hacia:
+```
+sudo nano /etc/apache2/apache2.conf
+```
+Agregamos la siguiente linea al final del archivo apache2.conf
+```
+Include /etc/phpmyadmin/apache.conf
+```
+Reiniciamos los servicios para que se apliquen los cambios:
+```
+sudo systemctl restart apache2
+```
+
+
+
+
+
 
 
 ## :star: Instalación de NODE:
