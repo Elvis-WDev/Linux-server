@@ -39,6 +39,44 @@ Buscamos archivo con mLocate:
 ```
 locate <FILE>
 ```
+
+Cambiar TMZ en UBUNTU local:
+> Verificamos el TMZ actual:
+```
+timedatectl O sudo dpkg-reconfigure tzdata
+```
+> Buscamos el TMZ a cambiar con:
+```
+timedatectl list-timezones
+```
+> Cambiar el TMZ:
+```
+sudo timedatectl set-timezone <TMZ>
+```
+Cambiar TMZ en MySql local:
+
+> Ingresamos al shell de MySql como ROOT:
+```
+mysql -u root -p
+```
+> Verificamos TMZ actual:
+```
+SELECT NOW();
+```
+> Nos dirigimos hacia la siguiente ruta y creamos el archivo data.conf:
+```
+nano /etc/mysql/conf.d/date.conf
+```
+> Dentro del archivo date.conf agregamos la siguiente linea:
+```
+default_time_zone='America/Guayaquil'
+```
+> Reiniciamos MySql service:
+```
+service mysql restart
+```
+
+
 ## :star: Preparamos servicios HTTP:
 Instalamos APACHE o NGINX:
 ```
@@ -196,7 +234,7 @@ sudo apt install phpmyadmin php-mbstring php-zip php-gd php-json php-curl
 > Si salta un error le damos en "abort"
 
 Para solucionar el error de instalación de PhpMyAdmin debemos entrar al shell de MySql y eliminar el componente de autenticación por un momento:
->Ingresamos al shell de MySql como ROOT:
+> Ingresamos al shell de MySql como ROOT:
 ```
 mysql -u root -p
 ```
@@ -223,11 +261,68 @@ Reiniciamos los servicios para que se apliquen los cambios:
 ```
 sudo systemctl restart apache2
 ```
+## :star: Permitir archivo .htacces:
+Activamos el modo rescritura:
+```
+sudo a2enmod rewrite
+```
+Ingresamos a la ruta de sites-availables y editamos el archivo a activar:
+```
+sudo nano /etc/apache2/sites-availables/<archivo>
+```
+Dentro del archivo agregamos las siguientes lineas al final:
+```
+<Directory /var/www/<dir>>
+ 	AllowOverride All 
+</Directory>
+```
+> Reiniciados apache2
 
+## :star: Instalación de SSL con certbot:
+> Para apache2:
+```
+sudo apt install certbot python3-certbot-apache
+```
+> Para Nginx:
+```
+sudo apt install certbot python3-certbot-nginx
+```
+Iniciamos certbot:
+> Aapche2:
+```
+sudo certbot --apache
+```
+> Nginx:
+```
+sudo certbot --nginx
+```
 
-
-
-
-
+Verificamos que certbot esté funcionando correctamente:
+```
+sudo systemctl status certbot.timer
+```
+Ejecutamos una simulación de renovación de SSL de certbot si no da errores todo OK:
+```
+sudo certbot renew --dry-run
+```
+## :star: Enlazamiento de dominio:
+Para poder enlazar un dominio primero nos dirigimos hacia la siguiente ruta:
+> Para apache2
+```
+cd /etc/apache2/sites-available/
+```
+> Para Nginx
+```
+cd /etc/nginx/sites-available/
+```
+Aquí encontraremos los archivos a editar para el dominio correspondiente:
+> Dentro del archivo debemos colocar las siguientes líneas:
+```
+ServerAdmin webmaster@localhost
+DocumentRoot var/wwww/<DIRECTORY>
+ServerName <DOMINIO.TLD>
+ServerAlias <SUBDOMINIO.DOMINIO.TLD> OR <DOMINIO.TLD>
+```
+> Guardamos y salimos
 
 ## :star: Instalación de NODE:
