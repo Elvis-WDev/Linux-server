@@ -391,7 +391,6 @@ DocumentRoot var/wwww/<DIRECTORY>
 ServerName <DOMINIO.TLD>
 ServerAlias <SUBDOMINIO.DOMINIO.TLD> OR <DOMINIO.TLD>
 ```
-> Guardamos y salimos
 
 Nos diriimos a namecheap y enlazamos nuestro dominio hacia el servidor:
 
@@ -400,5 +399,40 @@ Nos diriimos a namecheap y enlazamos nuestro dominio hacia el servidor:
 
 ![Referencia](https://res.cloudinary.com/app-test-elvis/image/upload/v1666403208/Github-readmes/namecheapExample_r2ybhw.png)
 
-
 ## :star: Instalación de NODE:
+Nos aseguramos si tenemos instalados los paquetes necesarios:
+```
+curl --version
+node --version
+```
+Si no tentemos instalado curl:
+```
+sudo apt install curl
+```
+Tomamos el paquete de instalación de la página oficial:
+```
+curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+```
+Instalamos NODE:
+```
+sudo apt-get install -y nodejs
+```
+Comprobamos instalaciones correctas:
+```
+Node --version
+npm --version
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
