@@ -75,8 +75,18 @@ default_time_zone='America/Guayaquil'
 ```
 service mysql restart
 ```
-
-
+Crear acceso directo de un archivo en la ruta actual:
+```
+sudo ln -s /etc/apache2/sites-available/<acrchivo>
+```
+Activar un archivo de sites-enabled:
+```
+sudo a2ensite <ARCHIVO DE SITES_AVAILABLE>
+```
+Desactivar un archivo de sites-enabled:
+```
+sudo a2dissite <ARCHIVO DE SITES_AVAILABLE>
+ ```
 ## :star: Preparamos servicios HTTP:
 Instalamos APACHE o NGINX:
 ```
@@ -342,6 +352,26 @@ sudo systemctl status certbot.timer
 Ejecutamos una simulación de renovación de SSL de certbot si no da errores todo OK:
 ```
 sudo certbot renew --dry-run
+```
+## :star: Estructura de un archivo para http en sites-availables:
+```
+<VirtualHost *:80>
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/<DIRECTORY>
+        ServerName <DOMINIO>
+        ServerAlias <SUBDOMINIO.DOMINIO>
+	
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
+```
+Para habilitar reescritura .htaccess:
+```
+<Directory /var/www/<DIRECTORY>>
+ AllowOverride All
+</Directory>
 ```
 ## :star: Enlazamiento de dominio:
 Para poder enlazar un dominio primero nos dirigimos hacia la siguiente ruta:
