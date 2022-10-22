@@ -261,7 +261,45 @@ Reiniciamos los servicios para que se apliquen los cambios:
 ```
 sudo systemctl restart apache2
 ```
-## :star: Permitir archivo .htacces:
+
+## :star: Agregar capa de seguridad a PhpMyAdmin:
+
+Nos dirigimos hacia:
+```
+nano /etc/phpmyadmin/apache.conf
+```
+En el Alias cambiamos el nombre por defecto por cualquier otro:
+```
+Alias /<NAME> /usr/share/phpmyadmin
+```
+
+![Referencia:](https://res.cloudinary.com/app-test-elvis/image/upload/v1666407122/Github-readmes/phpmyadmin_rqi4re.png)
+
+Permitir reescritura del .htaccess dentro del TAG directory:
+```
+AllowOverride All
+```
+Nos dirigimos hacia:
+```
+cd /usr/share/phpmyadmin/
+```
+Creamos un archivo .htaccess:
+```
+nano .htaccess
+```
+Agreamos las siguientes líneas dentro del archivo .htaccess:
+```
+AuthType Basic
+AuthName "Restricted Files"
+AuthUserFile /etc/phpmyadmin/.htpasswd
+Require valid-user
+```
+Creamos las credenciales para esta capa de autenticación al ingresar a PhpMyAdmin:
+```
+sudo htpasswd -c /etc/phpmyadmin/.htpasswd <USER>
+```
+
+## :star: Permitir archivo .htaccess:
 Activamos el modo rescritura:
 ```
 sudo a2enmod rewrite
@@ -324,5 +362,13 @@ ServerName <DOMINIO.TLD>
 ServerAlias <SUBDOMINIO.DOMINIO.TLD> OR <DOMINIO.TLD>
 ```
 > Guardamos y salimos
+
+Nos diriimos a namecheap y enlazamos nuestro dominio hacia el servidor:
+
+> A-record: Sirve para enlazar nuestro dominio con los valores host=@ y value=IP-server
+> C-name: Sirve para habilitar un subdominio con los valores host=subdominio y value:dominio
+
+![Referencia](https://res.cloudinary.com/app-test-elvis/image/upload/v1666403208/Github-readmes/namecheapExample_r2ybhw.png)
+
 
 ## :star: Instalación de NODE:
