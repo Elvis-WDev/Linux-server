@@ -86,7 +86,11 @@ sudo a2ensite <ARCHIVO DE SITES_AVAILABLE>
 Desactivar un archivo de sites-enabled:
 ```
 sudo a2dissite <ARCHIVO DE SITES_AVAILABLE>
- ```
+```
+Iniciarlizar un proyecto NODE en server con PM2:
+```
+pm2 start -f --name portfolio deploy-react -- -d dist -p 5176
+```
 ## :star: Preparamos servicios HTTP:
 Instalamos APACHE o NGINX:
 ```
